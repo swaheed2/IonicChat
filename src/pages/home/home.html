@@ -3,22 +3,27 @@
     <ion-title>
       Chat
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="changeName()">
+        {{name}}
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding class="main">
+<ion-content padding class="main" #content>
   <ion-list class="chats">
-    <ion-item no-lines class="chat" [ngClass]="isMe(chat)? 'me': 'them'" text-wrap *ngFor="let chat of chats">
+    <ion-item no-lines class="chat" [ngClass]="isMe(chat)? 'me': 'them'" text-wrap *ngFor="let chat of chats | async">
       <p class="name" *ngIf="!isMe(chat)">{{chat.name}}</p>
       <h2 class="message">{{chat.message}}</h2>
-      <span class="time">{{chat.time}}</span>
+      <span class="time">{{getTime(chat.time)}}</span>
     </ion-item>
   </ion-list>
 </ion-content>
 <ion-footer class="footer" no-border>
   <ion-toolbar color="background">
     <form>
-      <ion-input class="messagebar" type="text" placeholder="Type a message"></ion-input>
-      <button class="sendbtn" round ion-button color="primary"><ion-icon name="send"></ion-icon></button>
+      <ion-input class="messagebar" name="chatMessage" [(ngModel)]="chatMessage" type="text" placeholder="Type a message"></ion-input>
+      <button class="sendbtn" (click)="sendChat()" round ion-button color="primary"><ion-icon name="send"></ion-icon></button>
     </form>
   </ion-toolbar>
 </ion-footer>
