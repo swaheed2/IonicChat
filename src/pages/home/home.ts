@@ -18,11 +18,15 @@ export class HomePage {
 	chats: FirebaseListObservable<any> = this.database.getChats();
 	constructor(private alertCtrl: AlertController, public database: DatabaseProvider) {
 		this.name = localStorage.getItem("name");
+
+		this.chats.subscribe(()=>{
+			this.scrollToBottom();
+		})
 	}
 
 	sendChat() {
 
-		if(!this.name){
+		if (!this.name) {
 			return this.changeName();
 		}
 
@@ -32,13 +36,17 @@ export class HomePage {
 			time: moment().toISOString()
 		});
 		this.chatMessage = "";
-		setTimeout(() => {
-			this.content.scrollToBottom();
-		});
+		this.scrollToBottom();
 	}
 
 	isMe(chat) {
 		return chat.name === this.name;
+	}
+
+	scrollToBottom() {
+		setTimeout(() => {
+			this.content.scrollToBottom();
+		});
 	}
 
 	changeName() {
